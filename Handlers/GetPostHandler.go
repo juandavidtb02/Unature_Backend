@@ -4,19 +4,22 @@ import (
 	"GORM/Connection"
 	"GORM/Models"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 )
 
 func GetPostHandler(c *gin.Context) {
-	// Maneja la lógica de la respuesta aquí
 	conn, _ := Connection.GetConnection()
 
-	var publicaciones []Models.Publicacion
-	if err := conn.Preload("Usuario").Preload("Imagen").Find(&publicaciones).Error; err != nil {
-		log.Println("Error al obtener publicaciones:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al obtener publicaciones"})
+	// Obtener el ID de la publicación desde los parámetros de la URL
+	id := c.Param("id")
+
+	// Verificar si la publicación existe
+	var publicacion Models.Publicacion
+	if err := conn.First(&publicacion, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Publicación no encontrada"})
 		return
 	}
-	c.JSON(http.StatusOK, publicaciones)
+
+	// Devolver la publicación en formato JSON
+	c.JSON(http.StatusOK, publicacion)
 }
