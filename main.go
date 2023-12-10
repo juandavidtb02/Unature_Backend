@@ -9,9 +9,24 @@ import (
 )
 
 func main() {
-	//Migrate.Init()
 	puerto := 8080
 	r := gin.Default()
+
+	// Add CORS middleware
+	r.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	})
+
 	Migrate.Init()
 	r.GET("/posts", Handlers.GetPostsHandler)
 	r.GET("/post/:id", Handlers.GetPostHandler)
