@@ -13,7 +13,7 @@ func GetPostHandler(c *gin.Context) {
 	conn, _ := Connection.GetConnection()
 
 	var publicaciones []Models.Publicacion
-	if err := conn.Preload("Usuario").Preload("Imagen").Find(&publicaciones).Error; err != nil {
+	if err := conn.Preload("Usuario").Find(&publicaciones).Error; err != nil {
 		log.Println("Error al obtener publicaciones:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al obtener publicaciones"})
 		return
