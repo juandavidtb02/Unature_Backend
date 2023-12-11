@@ -26,7 +26,7 @@ func GenerateToken(usuario Models.Usuario) (string, error) {
 	claims := Claims{
 		Username: usuario.CorreoUsuario,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 1).Unix(), // Token expira en 1 hora
+			ExpiresAt: time.Now().Add(time.Hour * 24).Unix(), // Token expira en 24 hora
 		},
 	}
 
@@ -67,5 +67,5 @@ func LoginHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": token, "user_id": user.ID})
+	c.JSON(http.StatusOK, gin.H{"token": token, "user_id": user.ID, "rol": user.RolID})
 }
