@@ -39,6 +39,20 @@ func main() {
 	r.DELETE("/post/:id", Handlers.DeletePostHandler)
 	r.PUT("/post/:id", Handlers.EditPostHandler)
 
+	r.POST("/identificacion", Handlers.CreateIdentification)
+	r.GET("/publicacion/:id/identificaciones", Handlers.GetIdentication)
+	r.GET("/publicacion/:id/identificaciones/count", Handlers.GetIdentificationCount)
+	r.PUT("/identificacion/:id", Handlers.EditIdentification)
+	r.DELETE("/identificacion/:id", Handlers.DeleteIdentification)
+
+	r.POST("/aprobacion", Handlers.CreateAprobation)
+	r.GET("/identificacion/:id/aprobaciones", Handlers.GetAprobationCount)
+	r.DELETE("/aprobacion/:id", Handlers.DeleteAprobation)
+
+	r.GET("/publications", Handlers.GetPublications)
+	r.DELETE("/publication/:id", Handlers.DeletePublication)
+	r.PUT("/publication/:id", Handlers.EditPublication)
+
 	fmt.Printf("El servidor está escuchando en el puerto %d...\n", puerto)
 	err := r.Run(fmt.Sprintf(":%d", puerto))
 	if err != nil {
