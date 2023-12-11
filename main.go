@@ -43,6 +43,8 @@ func main() {
 	r.POST("/signup", Handlers.CreateUserHandler)
 	r.POST("/login", Handlers.LoginHandler)
 	r.GET("/user/:id", Handlers.GetUser)
+
+	r.GET("/global", Handlers.GlobalData)
 	// Rutas protegidas (requieren autenticación)
 
 	r.Use(Middleware.AuthMiddleware())
