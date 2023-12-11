@@ -38,6 +38,7 @@ func main() {
 	r.GET("/publicacion/:id/identificaciones/count", Handlers.GetIdentificationCount)
 	r.GET("/identificacion/:id/aprobaciones", Handlers.GetAprobationCount)
 	r.GET("/publications", Handlers.GetPublications)
+	r.GET("/publication/:id", Handlers.GetPublication)
 	r.POST("/signup", Handlers.CreateUserHandler)
 	r.POST("/login", Handlers.LoginHandler)
 	r.GET("/user/:id", Handlers.GetUser)
