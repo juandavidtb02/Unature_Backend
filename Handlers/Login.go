@@ -17,6 +17,7 @@ type Credentials struct {
 
 type Claims struct {
 	Username string `json:"username"`
+	Role     string
 	jwt.StandardClaims
 }
 
@@ -25,6 +26,7 @@ var secretKey = []byte("key123")
 func GenerateToken(usuario Models.Usuario) (string, error) {
 	claims := Claims{
 		Username: usuario.CorreoUsuario,
+		Role:     usuario.Rol.TipoRol,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 1).Unix(), // Token expira en 1 hora
 		},

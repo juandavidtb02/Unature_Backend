@@ -2,7 +2,7 @@ package main
 
 import (
 	"GORM/Handlers"
-	"GORM/Migrate"
+	"GORM/Middleware"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -27,31 +27,40 @@ func main() {
 		c.Next()
 	})
 
-	Migrate.Init()
+	//Migrate.Init()
+	// Rutas públicas (sin protección)
 	r.GET("/posts", Handlers.GetPostsHandler)
 	r.GET("/post/:id", Handlers.GetPostHandler)
 	r.GET("/post", Handlers.GetPostsHandler)
 	r.GET("/rol", Handlers.GetRolesHandler)
-	r.POST("/rol", Handlers.CreateRoleHandler)
-	r.POST("/post", Handlers.CreatePostHandler)
-	r.POST("/signup", Handlers.CreateUserHandler)
-	r.POST("/login", Handlers.LoginHandler)
-	r.DELETE("/post/:id", Handlers.DeletePostHandler)
-	r.PUT("/post/:id", Handlers.EditPostHandler)
-
-	r.POST("/identificacion", Handlers.CreateIdentification)
 	r.GET("/publicacion/:id/identificaciones", Handlers.GetIdentication)
 	r.GET("/publicacion/:id/identificaciones/count", Handlers.GetIdentificationCount)
-	r.PUT("/identificacion/:id", Handlers.EditIdentification)
-	r.DELETE("/identificacion/:id", Handlers.DeleteIdentification)
-
-	r.POST("/aprobacion", Handlers.CreateAprobation)
 	r.GET("/identificacion/:id/aprobaciones", Handlers.GetAprobationCount)
-	r.DELETE("/aprobacion/:id", Handlers.DeleteAprobation)
-
 	r.GET("/publications", Handlers.GetPublications)
-	r.DELETE("/publication/:id", Handlers.DeletePublication)
-	r.PUT("/publication/:id", Handlers.EditPublication)
+	r.POST("/signup", Handlers.CreateUserHandler)
+	r.POST("/login", Handlers.LoginHandler)
+	// Rutas protegidas (requieren autenticación)
+	r.Use(Middleware.AuthMiddleware("admin"))
+	{
+		r.POST("/rol", Handlers.CreateRoleHandler)
+
+	}
+	r.Use(Middleware.AuthMiddleware())
+	{
+		r.DELETE("/post/:id", Handlers.DeletePostHandler)
+		r.PUT("/post/:id", Handlers.EditPostHandler)
+
+		r.POST("/identificacion", Handlers.CreateIdentification)
+
+		r.PUT("/identificacion/:id", Handlers.EditIdentification)
+		r.DELETE("/identificacion/:id", Handlers.DeleteIdentification)
+
+		r.POST("/aprobacion", Handlers.CreateAprobation)
+		r.DELETE("/aprobacion/:id", Handlers.DeleteAprobation)
+
+		r.DELETE("/publication/:id", Handlers.DeletePublication)
+		r.PUT("/publication/:id", Handlers.EditPublication)
+	}
 
 	fmt.Printf("El servidor está escuchando en el puerto %d...\n", puerto)
 	err := r.Run(fmt.Sprintf(":%d", puerto))
