@@ -10,7 +10,7 @@ type Publicacion struct {
 	Ubicacion   int     `gorm:"not null" json:"ubicacion"`
 	Reportes    int     `gorm:"not null" json:"reportes"`
 	UsuarioID   uint    `gorm:"not null" json:"id_usuario"`
-	UrlImagen   string  `gorm:"type:varchar(100);not null" json:"url_imagen"`
+	UrlImagen   string  `gorm:"type:text;not null" json:"url_imagen"`
 	Usuario     Usuario `gorm:"foreignKey:UsuarioID"`
 	//Identificaciones []Identificacion `gorm:"foreignKey:PublicacionID"`
 }
