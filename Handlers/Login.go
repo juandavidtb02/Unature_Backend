@@ -56,7 +56,7 @@ func LoginHandler(c *gin.Context) {
 
 	// Comparar la contraseña proporcionada con la almacenada en la base de datos
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(credentials.Contraseña)); err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Credenciales incorrectas"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Credenciales incorrectasss"})
 		return
 	}
 
