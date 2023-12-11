@@ -16,3 +16,11 @@ type Usuario struct {
 	//Aprobaciones     []Aprobacion     `gorm:"foreignKey:UsuarioID"`
 	//Identificaciones []Identificacion `gorm:"foreignKey:UsuarioID"`
 }
+
+// En el modelo Usuario
+
+func (u *Usuario) CountPublicaciones(db *gorm.DB) int {
+	var count int64
+	db.Model(u).Where("usuario_id = ?", u.ID).Count(&count)
+	return int(count)
+}
