@@ -20,15 +20,24 @@ func CreateUserHandler(c *gin.Context) {
 		return
 	}
 
+	// Verificar si el rol ya existe o crear uno nuevo
+	var rol Models.Rol
+	if err := conn.FirstOrCreate(&rol, Models.Rol{TipoRol: "usuario"}).Error; err != nil {
+		log.Println("Error al obtener/crear el rol:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al obtener/crear el rol"})
+		return
+	}
+
 	// Encriptar la contraseña antes de almacenarla en la base de datos
-	hashedContraseña, err := bcrypt.GenerateFromPassword([]byte(nuevoUsuario.Contraseña), bcrypt.DefaultCost)
+	hashedContraseña, err := bcrypt.GenerateFromPassword([]byte(nuevoUsuario.Password), bcrypt.DefaultCost)
 	if err != nil {
 		log.Println("Error al encriptar la contraseña:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al encriptar la contraseña"})
 		return
 	}
 
-	nuevoUsuario.Contraseña = string(hashedContraseña)
+	nuevoUsuario.Password = string(hashedContraseña)
+	nuevoUsuario.Rol = rol // Asignar el rol directamente
 
 	// Crear el usuario en la base de datos
 	if err := conn.Create(&nuevoUsuario).Error; err != nil {
