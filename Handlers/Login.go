@@ -17,7 +17,6 @@ type Credentials struct {
 
 type Claims struct {
 	Username string `json:"username"`
-	Role     string
 	jwt.StandardClaims
 }
 
@@ -26,7 +25,6 @@ var secretKey = []byte("key123")
 func GenerateToken(usuario Models.Usuario) (string, error) {
 	claims := Claims{
 		Username: usuario.CorreoUsuario,
-		Role:     usuario.Rol.TipoRol,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 1).Unix(), // Token expira en 1 hora
 		},
@@ -57,7 +55,7 @@ func LoginHandler(c *gin.Context) {
 	}
 
 	// Comparar la contraseña proporcionada con la almacenada en la base de datos
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Contraseña), []byte(credentials.Contraseña)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(credentials.Contraseña)); err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Credenciales incorrectas"})
 		return
 	}
