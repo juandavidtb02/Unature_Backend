@@ -40,6 +40,7 @@ func main() {
 	r.GET("/publications", Handlers.GetPublications)
 	r.POST("/signup", Handlers.CreateUserHandler)
 	r.POST("/login", Handlers.LoginHandler)
+	r.GET("/user/:id", Handlers.GetUser)
 	// Rutas protegidas (requieren autenticación)
 
 	r.Use(Middleware.AuthMiddleware())
