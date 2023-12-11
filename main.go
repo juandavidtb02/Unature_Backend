@@ -45,6 +45,7 @@ func main() {
 	r.GET("/user/:id", Handlers.GetUser)
 
 	r.GET("/global", Handlers.GlobalData)
+	r.POST("/publication/:id/reportes", Handlers.Reportes)
 	// Rutas protegidas (requieren autenticación)
 
 	r.Use(Middleware.AuthMiddleware())

@@ -27,7 +27,7 @@ func GetIdentication(c *gin.Context) {
 
 	// Consulta la base de datos para obtener las identificaciones asociadas a la publicación
 	var identificaciones []Models.Identificacion
-	result := conn.Where("publicacion_id = ?", publicacionID).Find(&identificaciones)
+	result := conn.Preload("Usuario").Preload("Publicacion").Where("publicacion_id = ?", publicacionID).Find(&identificaciones)
 	if result.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al obtener las identificaciones"})
 		return
