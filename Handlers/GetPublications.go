@@ -31,6 +31,14 @@ func GetPublications(c *gin.Context) {
 				}
 				return nombreUsuario
 			}(),
+			"id_usuario": func() string {
+				var idUsuario string
+				if err := conn.Model(&Models.Usuario{}).Where("id = ?", publicacion.UsuarioID).Pluck("id", &idUsuario).Error; err != nil {
+					log.Println("Error al obtener el nombre del usuario:", err)
+					return ""
+				}
+				return idUsuario
+			}(),
 			"likes": func() int64 {
 				var sumLikes int64 = 0
 
